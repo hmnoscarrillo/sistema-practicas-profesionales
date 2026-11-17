@@ -1,0 +1,15 @@
+myvenv/
+frontend/
+scripts/
+__pycache__/
+*.pyc
+.env
+.env.*
+.local-*
+.demo-accounts.txt
+.initial-admin.txt
+.admin-session-test
+*.accdb
+*.pdf
+COMANDOS_LOCAL.txt
+GUIA_DIAGRAMA_ACCESS.txt

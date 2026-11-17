@@ -1,0 +1,22 @@
+DIAGRAMA DE RELACIONES EN MICROSOFT ACCESS
+
+Archivo: Diagrama_Relaciones_Practicas.accdb
+
+ABRIR EL DIAGRAMA
+1. Abre Diagrama_Relaciones_Practicas.accdb con Microsoft Access.
+2. Ve a la pestaña Herramientas de base de datos.
+3. Selecciona Relaciones.
+4. Si no aparecen todas las tablas, pulsa Mostrar todas las relaciones.
+5. Organiza las tablas arrastrando sus encabezados. Luego guarda el diseño de la ventana Relaciones.
+
+CÓMO LEERLO
+- Una línea une la clave principal de la tabla padre con la clave foránea de la tabla relacionada.
+- El extremo con 1 representa el registro principal; el extremo con infinito representa los registros asociados.
+- El archivo contiene las 15 tablas del sistema y las 20 relaciones que existen en la base local.
+- Guia_lectura resume el orden de lectura por capas: institución, personas y cargos, prácticas, seguimiento y seguridad.
+- Para permisos: roles → roles_modulos ← modulos. Para asignación de cuentas: roles → usuarios_sistema.
+- El nivel de jerarquía de cada rol se guarda en roles.nivel_jerarquia. La estructura actual no tiene una relación padre-hijo entre roles; el orden se define por ese campo.
+- Personas puede conectar con tutores_academicos y tutores_empresariales, por lo que una misma persona puede tener ambos cargos.
+
+ALCANCE
+Este archivo presenta la estructura y las relaciones de la base. No incluye las filas de datos de PostgreSQL/Neon ni modifica ninguna base de datos. Las relaciones se tomaron de la base PostgreSQL local para que puedas revisar el modelo en Access.

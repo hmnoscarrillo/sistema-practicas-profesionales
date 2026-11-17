@@ -1,0 +1,78 @@
+COMANDOS PARA TRABAJAR EN LOCAL (WINDOWS / POWERSHELL)
+Proyecto: C:\parcial 1 corte 2
+
+IMPORTANTE
+- Estos comandos ejecutan el frontend, la API y PostgreSQL en este computador.
+- El frontend local debe usar VITE_API_URL=http://localhost:8000.
+- La API local debe usar .env.local y DATABASE_URL con localhost:5433/practicas.
+- No ejecutes comandos de despliegue (por ejemplo, vercel deploy) ni cambies DATABASE_URL a Neon si deseas trabajar solo en local.
+- Los cambios hechos en la base local no se sincronizan automáticamente con la nube.
+- Para usar la aplicación local, PostgreSQL debe estar iniciado y debes mantener abiertas las dos terminales (API y frontend).
+
+1) ABRIR POWERSHELL PARA LA API
+Abre una ventana de PowerShell y ejecuta:
+
+cd "C:\parcial 1 corte 2"
+.\myvenv\Scripts\Activate.ps1
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+
+Deja esta ventana abierta. La API local estará en:
+http://localhost:8000
+Documentación local:
+http://localhost:8000/docs
+Verificación de estado:
+http://localhost:8000/health
+
+Si PowerShell bloquea Activate.ps1, no necesitas activar el entorno; ejecuta directamente:
+cd "C:\parcial 1 corte 2"
+.\myvenv\Scripts\python.exe -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+
+2) ABRIR POWERSHELL PARA EL FRONTEND
+Abre una segunda ventana de PowerShell y ejecuta:
+
+cd "C:\parcial 1 corte 2\frontend"
+npm run dev -- --host 127.0.0.1
+
+Deja esta ventana abierta. Abre en el navegador:
+http://localhost:5173
+
+La configuración frontend/.env.local debe contener:
+VITE_API_URL=http://localhost:8000
+
+3) COMPROBAR QUE LA BASE LOCAL ESTÉ INICIADA
+Normalmente PostgreSQL 18 ya inicia como servicio de Windows. Para consultar su estado:
+
+Get-Service postgresql-x64-18
+
+Si aparece Stopped, inicia PowerShell como administrador y ejecuta:
+Start-Service postgresql-x64-18
+
+La base local utiliza el puerto 5433 y el nombre practicas. No cambies la URL por una dirección de Neon para el trabajo local.
+
+4) PRIMERA INSTALACIÓN (SOLO SI FALTAN DEPENDENCIAS)
+API, desde la raíz:
+
+cd "C:\parcial 1 corte 2"
+.\myvenv\Scripts\python.exe -m pip install -r requirements.txt
+
+Frontend, desde frontend:
+
+cd "C:\parcial 1 corte 2\frontend"
+npm install
+
+5) CERRAR LA SESIÓN LOCAL
+En cada terminal donde estén corriendo API y frontend, presiona:
+Ctrl+C
+
+Esto detiene los servidores locales. No apaga ni modifica los servicios desplegados en la nube.
+
+RESUMEN
+- Página local: http://localhost:5173
+- API local: http://localhost:8000
+- Swagger local: http://localhost:8000/docs
+- Base local: PostgreSQL en localhost:5433, base practicas
+- Configuración frontend: frontend/.env.local
+- Configuración API local: .env.local (tiene prioridad sobre .env)
+
+Si la página muestra error de conexión, revisa que PostgreSQL esté iniciado, que la API esté ejecutándose en la primera terminal y que frontend/.env.local apunte a http://localhost:8000.
+
