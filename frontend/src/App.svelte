@@ -23,6 +23,12 @@
   import Modal from './lib/components/Modal.svelte';
   import Toast from './lib/components/Toast.svelte';
   import UserManager from './lib/components/UserManager.svelte';
+  import Tablero from './lib/components/Tablero.svelte';
+  import Reportes from './lib/components/Reportes.svelte';
+
+  const isEmbedTablero =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('embed') === 'tablero';
 
   let roles = $state([]);
   let users = $state([]);
@@ -340,6 +346,11 @@
       await loadDashboardData();
       return;
     }
+    if (code === 'tablero' || code === 'reportes') {
+      activeCode = code;
+      pageError = '';
+      return;
+    }
     const permission = permissionMap.get(code);
     if (!permission?.puede_leer) {
       notify('No tienes permiso para consultar este módulo.', 'error');
@@ -514,6 +525,15 @@
   </main>
 {:else if !session}
   <Login busy={loginBusy} error={loginError} onlogin={login} />
+{:else if isEmbedTablero}
+  <Tablero embedded={true} onnotify={notify} />
+  {#if toast.message}
+    <Toast
+      message={toast.message}
+      kind={toast.kind}
+      onclose={() => (toast = { message: '', kind: 'success' })}
+    />
+  {/if}
 {:else}
   <a href="#main-content" class="skip-link">Ir al contenido principal</a>
   <div class="app-shell">
@@ -523,7 +543,15 @@
           <span class="topbar-mark"><BriefcaseBusiness size={17} aria-hidden="true" /></span>
           <span>Portal académico</span>
           <span class="breadcrumb-slash" aria-hidden="true">/</span>
-          <span>{activeCode === 'dashboard' ? 'Resumen' : activeSchema?.title || 'Gestión'}</span>
+          <span>
+            {activeCode === 'dashboard'
+              ? 'Resumen'
+              : activeCode === 'tablero'
+                ? 'Tablero'
+                : activeCode === 'reportes'
+                  ? 'Reportes'
+                  : activeSchema?.title || 'Gestión'}
+          </span>
         </div>
 
         <div class="topbar-right">
@@ -649,6 +677,20 @@
             role={session.nombreCompleto || session.nombres}
             onnavigate={selectModule}
           />
+        {:else if activeCode === 'tablero'}
+          <PageHeader
+            title="Tablero analítico"
+            subtitle="Indicadores clave, gráficos estadísticos y filtros publicados mediante iframe."
+          />
+          <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
+          <Tablero embedded={false} onnotify={notify} />
+        {:else if activeCode === 'reportes'}
+          <PageHeader
+            title="Reportes institucionales"
+            subtitle="Consulta multitabla sin identificadores, exportación PDF/Excel y envío por correo."
+          />
+          <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
+          <Reportes onnotify={notify} />
         {:else if activeSchema}
           <PageHeader
             title={activeSchema.title}

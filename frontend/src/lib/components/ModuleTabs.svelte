@@ -1,5 +1,12 @@
 <script>
-  import { LayoutDashboard, Building2, UsersRound, BriefcaseBusiness } from 'lucide-svelte';
+  import {
+    LayoutDashboard,
+    Building2,
+    UsersRound,
+    BriefcaseBusiness,
+    BarChart3,
+    FileSpreadsheet,
+  } from 'lucide-svelte';
 
   let { modules = [], active = '', onnavigate = () => {} } = $props();
 
@@ -31,19 +38,31 @@
 
 <div class="module-navigation">
   <nav class="module-tabs" aria-label="Secciones principales">
-    <button class:active={active === 'dashboard'} onclick={() => onnavigate('dashboard')}><LayoutDashboard size={15}/><span>Inicio</span></button>
+    <button type="button" class:active={active === 'dashboard'} onclick={() => onnavigate('dashboard')}>
+      <LayoutDashboard size={15} aria-hidden="true" /><span>Inicio</span>
+    </button>
     {#each groups as group (group.key)}
       {@const Icon = group.icon}
       {#if group.codes.some((code) => readableCodes.has(code))}
-        <button class:active={activeGroup?.key === group.key} onclick={() => openGroup(group)}><Icon size={15}/><span>{group.label}</span></button>
+        <button type="button" class:active={activeGroup?.key === group.key} onclick={() => openGroup(group)}>
+          <Icon size={15} aria-hidden="true" /><span>{group.label}</span>
+        </button>
       {/if}
     {/each}
+    <button type="button" class:active={active === 'tablero'} onclick={() => onnavigate('tablero')}>
+      <BarChart3 size={15} aria-hidden="true" /><span>Tablero</span>
+    </button>
+    <button type="button" class:active={active === 'reportes'} onclick={() => onnavigate('reportes')}>
+      <FileSpreadsheet size={15} aria-hidden="true" /><span>Reportes</span>
+    </button>
   </nav>
 
   {#if activeGroup && groupModules.length > 1}
     <nav class="module-subtabs" aria-label={`Módulos de ${activeGroup.label}`}>
       {#each groupModules as module (module.modulo_codigo)}
-        <button class:active={active === module.modulo_codigo} onclick={() => onnavigate(module.modulo_codigo)}>{labels[module.modulo_codigo] || module.modulo_nombre}</button>
+        <button type="button" class:active={active === module.modulo_codigo} onclick={() => onnavigate(module.modulo_codigo)}>
+          {labels[module.modulo_codigo] || module.modulo_nombre}
+        </button>
       {/each}
     </nav>
   {/if}

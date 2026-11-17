@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Practicas Profesionales</string>
+    <string name="title_activity_main">Practicas Profesionales</string>
+    <string name="package_name">co.edu.practicas.app</string>
+    <string name="custom_url_scheme">co.edu.practicas.app</string>
+</resources>
