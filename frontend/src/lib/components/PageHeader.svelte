@@ -12,11 +12,13 @@
 </script>
 
 <header class="page-header">
-  <div class="page-heading">
-    <div class="breadcrumbs">PANEL <span>/</span> GESTIÓN</div>
-    <h1>{title}</h1>
-    <p>{subtitle}</p>
-  </div>
+  {#key title}
+    <div class="page-heading">
+      <div class="breadcrumbs">PANEL <span>/</span> GESTIÓN</div>
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
+    </div>
+  {/key}
   <div class="header-actions">
     {#if showExport}
       <button type="button" class="button secondary" onclick={onexport}>

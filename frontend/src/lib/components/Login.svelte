@@ -138,10 +138,12 @@
         </div>
 
         {#if error}
-          <div class="login-error" role="alert">
-            <CircleAlert size={16} aria-hidden="true" />
-            <span>{error}</span>
-          </div>
+          {#key error}
+            <div class="login-error" role="alert">
+              <CircleAlert size={16} aria-hidden="true" />
+              <span>{error}</span>
+            </div>
+          {/key}
         {/if}
 
         <button type="submit" class="button primary login-submit" disabled={busy}>

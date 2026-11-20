@@ -4,7 +4,9 @@
 </script>
 
 <script>
-  import { Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, Eye } from 'lucide-svelte';
+  import { fly } from 'svelte/transition';
+  import { Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, Eye } from 'lucide-svelte';
+  import { flyMotion } from '../motion.js';
   import StatusBadge from './StatusBadge.svelte';
 
   let {
@@ -177,7 +179,7 @@
       </label>
 
       {#if filterKey}
-        <label class="quick-filter-control value-filter">
+        <label class="quick-filter-control value-filter" in:fly={flyMotion({ x: -8, duration: 180 })}>
           <span>Valor</span>
           <select bind:value={filterValue} onchange={() => (page = 1)} aria-label="Valor del filtro">
             <option value="">Todos</option>
@@ -240,10 +242,8 @@
               <button type="button" class="th-button" onclick={() => sort(column)}>
                 <span>{column.label}</span>
                 <span class="sort-icon" aria-hidden="true">
-                  {#if order.key === column.key && order.asc}
+                  {#if order.key === column.key}
                     <ArrowUp size={13} />
-                  {:else if order.key === column.key && !order.asc}
-                    <ArrowDown size={13} />
                   {:else}
                     <ArrowUpDown size={13} />
                   {/if}
@@ -433,11 +433,16 @@
     display: inline-flex;
     align-items: center;
     opacity: 0.65;
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 150ms ease-out, color 150ms ease-out;
   }
 
   th[aria-sort] .sort-icon {
     opacity: 1;
     color: #315dce;
+  }
+
+  th[aria-sort='descending'] .sort-icon {
+    transform: rotate(180deg);
   }
 
   .table-empty {
@@ -446,6 +451,28 @@
     min-height: 10rem;
     padding: 1.5rem;
     text-align: center;
+    animation: table-empty-in 240ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  @keyframes table-empty-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sort-icon {
+      transition: none;
+    }
+
+    .table-empty {
+      animation: none;
+    }
   }
 
   .empty-table-icon {

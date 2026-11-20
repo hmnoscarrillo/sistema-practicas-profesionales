@@ -1,5 +1,6 @@
 <script>
   import { onMount, onDestroy, tick } from 'svelte';
+  import { fly } from 'svelte/transition';
   import {
     Search,
     Bell,
@@ -13,6 +14,7 @@
     ArrowRight,
   } from 'lucide-svelte';
   import { api, rows } from './lib/api.js';
+  import { flyMotion } from './lib/motion.js';
   import { moduleDefinitions } from './lib/data/modules.js';
   import Login from './lib/components/Login.svelte';
   import ModuleTabs from './lib/components/ModuleTabs.svelte';
@@ -517,7 +519,7 @@
     <span class="loading-spinner" aria-hidden="true"></span>
     <p>Conectando con la plataforma…</p>
     {#if pageError}
-      <div class="boot-error">
+      <div class="boot-error" in:fly={flyMotion({ y: 8, duration: 200 })}>
         <span>{pageError}</span>
         <button type="button" class="button secondary" onclick={bootstrapSession}>Reintentar</button>
       </div>
@@ -580,7 +582,12 @@
             </button>
 
             {#if notificationsOpen}
-              <div class="topbar-popover notifications-menu" role="region" aria-label="Alertas próximas">
+              <div
+                class="topbar-popover notifications-menu"
+                role="region"
+                aria-label="Alertas próximas"
+                transition:fly={flyMotion({ y: -8, duration: 180 })}
+              >
                 <div class="popover-header">
                   <strong>Recordatorios de prácticas</strong>
                   <span>{notifications.length}</span>
@@ -635,7 +642,7 @@
               </span>
             </button>
             {#if profileMenuOpen}
-              <div class="profile-menu">
+              <div class="profile-menu" transition:fly={flyMotion({ y: -8, duration: 180 })}>
                 {#if permissionMap.get('SEGURIDAD')?.puede_leer}
                   <button
                     type="button"
@@ -670,27 +677,16 @@
             title="Resumen general"
             subtitle="Monitorea los procesos de prácticas profesionales en un solo lugar."
           />
-          <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
-          <Dashboard
-            modules={allowedModules}
-            data={dataByCode}
-            role={session.nombreCompleto || session.nombres}
-            onnavigate={selectModule}
-          />
         {:else if activeCode === 'tablero'}
           <PageHeader
             title="Tablero analítico"
             subtitle="Indicadores clave, gráficos estadísticos y filtros publicados mediante iframe."
           />
-          <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
-          <Tablero embedded={false} onnotify={notify} />
         {:else if activeCode === 'reportes'}
           <PageHeader
             title="Reportes institucionales"
             subtitle="Consulta multitabla sin identificadores, exportación PDF/Excel y envío por correo."
           />
-          <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
-          <Reportes onnotify={notify} />
         {:else if activeSchema}
           <PageHeader
             title={activeSchema.title}
@@ -700,80 +696,99 @@
             showExport={Boolean(activeData.length)}
             onexport={exportCsv}
           />
-          <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
-          <div class="module-summary">
-            <span class="summary-dot" aria-hidden="true"></span>
-            <span>{activeData.length} {activeData.length === 1 ? 'registro' : 'registros'} en este módulo</span>
-            <span class="summary-separator" aria-hidden="true">·</span>
-            <span>{session.role?.nombre}</span>
-            <span class="summary-role-icon" aria-hidden="true"><CheckCircle2 size={14} /></span>
-          </div>
-
-          {#if pageError}
-            <div class="notice error-notice" role="alert">
-              <AlertCircle size={18} aria-hidden="true" />
-              <div>
-                <strong>No se pudo cargar la información</strong>
-                <span>{pageError}</span>
-              </div>
-              <button type="button" class="button secondary" onclick={() => loadModule()}>
-                <RefreshCw size={15} aria-hidden="true" />
-                Reintentar
-              </button>
-            </div>
-          {:else}
-            <section class="panel records-panel">
-              <div class="records-heading">
-                <div>
-                  <div class="records-title-row">
-                    <h2>Todos los {activeSchema.title.toLowerCase()}</h2>
-                    <span class="count-pill">{activeData.length}</span>
-                  </div>
-                  <p>Consulta y administra la información registrada en la plataforma.</p>
-                </div>
-                <button
-                  type="button"
-                  class="icon-button refresh-button"
-                  class:rotating={refreshing || loading}
-                  onclick={() => loadModule()}
-                  aria-label="Actualizar registros"
-                >
-                  <RefreshCw size={17} aria-hidden="true" />
-                </button>
-              </div>
-              {#if !loading}
-                <DataTable
-                  columns={activeSchema.columns}
-                  data={activeData}
-                  lookups={refLookups}
-                  caption={`Tabla de ${activeSchema.title.toLowerCase()}`}
-                  canUpdate={canUpdate}
-                  canDelete={canDelete}
-                  onedit={prepareEdit}
-                  ondelete={(record) => (deleting = record)}
-                />
-              {:else}
-                <div class="table-empty">
-                  <span class="loading-spinner" aria-hidden="true"></span>
-                  <span>Actualizando registros…</span>
-                </div>
-              {/if}
-            </section>
-          {/if}
-
-          {#if activeCode === 'SEGURIDAD'}
-            <div class="security-note">
-              <ShieldAlert size={17} aria-hidden="true" />
-              <span>
-                Los permisos se aplican en el servidor desde <strong>roles_modulos</strong>. Cada cuenta utiliza el rol
-                que el administrador le asignó.
-              </span>
-            </div>
-            {#if session.role?.nombre === 'Administrador'}
-              <UserManager {roles} {users} onupdated={(value) => (users = value)} onnotify={notify} />
-            {/if}
-          {/if}
         {/if}
+
+        <ModuleTabs modules={allowedModules} active={activeCode} onnavigate={selectModule} />
+
+        {#key activeCode}
+          <div class="view-stage" in:fly={flyMotion({ y: 14, duration: 260 })}>
+            {#if activeCode === 'dashboard'}
+              <Dashboard
+                modules={allowedModules}
+                data={dataByCode}
+                role={session.nombreCompleto || session.nombres}
+                onnavigate={selectModule}
+              />
+            {:else if activeCode === 'tablero'}
+              <Tablero embedded={false} onnotify={notify} />
+            {:else if activeCode === 'reportes'}
+              <Reportes onnotify={notify} />
+            {:else if activeSchema}
+              <div class="module-summary">
+                <span class="summary-dot" aria-hidden="true"></span>
+                <span>{activeData.length} {activeData.length === 1 ? 'registro' : 'registros'} en este módulo</span>
+                <span class="summary-separator" aria-hidden="true">·</span>
+                <span>{session.role?.nombre}</span>
+                <span class="summary-role-icon" aria-hidden="true"><CheckCircle2 size={14} /></span>
+              </div>
+
+              {#if pageError}
+                <div class="notice error-notice" role="alert">
+                  <AlertCircle size={18} aria-hidden="true" />
+                  <div>
+                    <strong>No se pudo cargar la información</strong>
+                    <span>{pageError}</span>
+                  </div>
+                  <button type="button" class="button secondary" onclick={() => loadModule()}>
+                    <RefreshCw size={15} aria-hidden="true" />
+                    Reintentar
+                  </button>
+                </div>
+              {:else}
+                <section class="panel records-panel">
+                  <div class="records-heading">
+                    <div>
+                      <div class="records-title-row">
+                        <h2>Todos los {activeSchema.title.toLowerCase()}</h2>
+                        <span class="count-pill">{activeData.length}</span>
+                      </div>
+                      <p>Consulta y administra la información registrada en la plataforma.</p>
+                    </div>
+                    <button
+                      type="button"
+                      class="icon-button refresh-button"
+                      class:rotating={refreshing || loading}
+                      onclick={() => loadModule()}
+                      aria-label="Actualizar registros"
+                    >
+                      <RefreshCw size={17} aria-hidden="true" />
+                    </button>
+                  </div>
+                  {#if !loading}
+                    <DataTable
+                      columns={activeSchema.columns}
+                      data={activeData}
+                      lookups={refLookups}
+                      caption={`Tabla de ${activeSchema.title.toLowerCase()}`}
+                      canUpdate={canUpdate}
+                      canDelete={canDelete}
+                      onedit={prepareEdit}
+                      ondelete={(record) => (deleting = record)}
+                    />
+                  {:else}
+                    <div class="table-empty">
+                      <span class="loading-spinner" aria-hidden="true"></span>
+                      <span>Actualizando registros…</span>
+                    </div>
+                  {/if}
+                </section>
+              {/if}
+
+              {#if activeCode === 'SEGURIDAD'}
+                <div class="security-note">
+                  <ShieldAlert size={17} aria-hidden="true" />
+                  <span>
+                    Los permisos se aplican en el servidor desde <strong>roles_modulos</strong>. Cada cuenta utiliza el rol
+                    que el administrador le asignó.
+                  </span>
+                </div>
+                {#if session.role?.nombre === 'Administrador'}
+                  <UserManager {roles} {users} onupdated={(value) => (users = value)} onnotify={notify} />
+                {/if}
+              {/if}
+            {/if}
+          </div>
+        {/key}
       </section>
 
       <footer class="app-footer">

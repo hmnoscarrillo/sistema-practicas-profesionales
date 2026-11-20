@@ -1,4 +1,5 @@
 <script>
+  import { fly } from 'svelte/transition';
   import {
     LayoutDashboard,
     Building2,
@@ -7,6 +8,7 @@
     BarChart3,
     FileSpreadsheet,
   } from 'lucide-svelte';
+  import { flyMotion } from '../motion.js';
 
   let { modules = [], active = '', onnavigate = () => {} } = $props();
 
@@ -58,12 +60,18 @@
   </nav>
 
   {#if activeGroup && groupModules.length > 1}
-    <nav class="module-subtabs" aria-label={`Módulos de ${activeGroup.label}`}>
-      {#each groupModules as module (module.modulo_codigo)}
-        <button type="button" class:active={active === module.modulo_codigo} onclick={() => onnavigate(module.modulo_codigo)}>
-          {labels[module.modulo_codigo] || module.modulo_nombre}
-        </button>
-      {/each}
-    </nav>
+    {#key activeGroup.key}
+      <nav
+        class="module-subtabs"
+        aria-label={`Módulos de ${activeGroup.label}`}
+        in:fly={flyMotion({ x: -12, duration: 200 })}
+      >
+        {#each groupModules as module (module.modulo_codigo)}
+          <button type="button" class:active={active === module.modulo_codigo} onclick={() => onnavigate(module.modulo_codigo)}>
+            {labels[module.modulo_codigo] || module.modulo_nombre}
+          </button>
+        {/each}
+      </nav>
+    {/key}
   {/if}
 </div>

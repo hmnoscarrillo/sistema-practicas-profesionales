@@ -312,7 +312,9 @@
           <p><strong>Criterios aplicados:</strong> {report.criterios}</p>
         </div>
         <div class="report-sheet-meta">
-          <span class="count-pill">{report.total} {report.total === 1 ? 'registro' : 'registros'}</span>
+          {#key report.generado}
+            <span class="count-pill report-count-pop">{report.total} {report.total === 1 ? 'registro' : 'registros'}</span>
+          {/key}
           {#if report.generado}
             <small>Generado: {report.generado.replace('T', ' ')}</small>
           {/if}

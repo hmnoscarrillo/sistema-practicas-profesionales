@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import {
     BriefcaseBusiness,
     Activity,
@@ -17,6 +17,7 @@
     PieChart,
   } from 'lucide-svelte';
   import { api } from '../api.js';
+  import { animateCount } from '../motion.js';
 
   let { embedded = false, onnotify = () => {} } = $props();
 
@@ -63,6 +64,37 @@
     typeof window !== 'undefined' ? `${window.location.origin}/?embed=tablero` : '/?embed=tablero',
   );
   let activeIframeUrl = $derived(customEmbedUrl.trim() || defaultEmbedUrl);
+
+  let kpiDisplay = $state({
+    total_practicas: 0,
+    practicas_en_proceso: 0,
+    convenios_vigentes: 0,
+    promedio_evaluacion: 0,
+  });
+
+  $effect(() => {
+    const kpis = payload?.kpis || {};
+    const specs = [
+      { key: 'total_practicas', decimals: 0 },
+      { key: 'practicas_en_proceso', decimals: 0 },
+      { key: 'convenios_vigentes', decimals: 0 },
+      { key: 'promedio_evaluacion', decimals: 2 },
+    ];
+    const cleanups = specs.map(({ key, decimals }) => {
+      const target = Number(kpis[key] || 0);
+      const start = untrack(() => kpiDisplay[key]);
+      return animateCount({
+        from: start,
+        to: target,
+        duration: 720,
+        decimals,
+        onUpdate: (val) => {
+          kpiDisplay[key] = val;
+        },
+      });
+    });
+    return () => cleanups.forEach((fn) => fn());
+  });
 
   async function loadDashboard() {
     loading = true;
@@ -221,7 +253,7 @@
             <span class="zone-tag red-tag">INDICADOR 01</span>
             <div class="kpi-row">
               <span class="kpi-icon red"><BriefcaseBusiness size={18} aria-hidden="true" /></span>
-              <strong>{payload.kpis.total_practicas}</strong>
+              <strong>{kpiDisplay.total_practicas}</strong>
             </div>
             <p>Total prácticas</p>
           </article>
@@ -230,7 +262,7 @@
             <span class="zone-tag red-tag">INDICADOR 02</span>
             <div class="kpi-row">
               <span class="kpi-icon red"><Activity size={18} aria-hidden="true" /></span>
-              <strong>{payload.kpis.practicas_en_proceso}</strong>
+              <strong>{kpiDisplay.practicas_en_proceso}</strong>
             </div>
             <p>En proceso</p>
           </article>
@@ -239,7 +271,7 @@
             <span class="zone-tag red-tag">INDICADOR 03</span>
             <div class="kpi-row">
               <span class="kpi-icon red"><FileCheck2 size={18} aria-hidden="true" /></span>
-              <strong>{payload.kpis.convenios_vigentes}</strong>
+              <strong>{kpiDisplay.convenios_vigentes}</strong>
             </div>
             <p>Convenios vigentes</p>
           </article>
@@ -248,7 +280,7 @@
             <span class="zone-tag red-tag">INDICADOR 04</span>
             <div class="kpi-row">
               <span class="kpi-icon red"><Award size={18} aria-hidden="true" /></span>
-              <strong>{Number(payload.kpis.promedio_evaluacion || 0).toFixed(2)}</strong>
+              <strong>{Number(kpiDisplay.promedio_evaluacion || 0).toFixed(2)}</strong>
             </div>
             <p>Promedio nota final</p>
           </article>

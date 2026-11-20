@@ -150,8 +150,9 @@ button:disabled {
   padding: 0 2rem;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 40;
   gap: 1rem;
+  animation: topbar-in 320ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .topbar-breadcrumb {
@@ -208,12 +209,14 @@ button:disabled {
   border-radius: 50%;
   background: #22a06b;
   box-shadow: 0 0 0 3px #22a06b22;
+  animation: beacon-pulse 2.4s ease-in-out infinite;
 }
 
 .api-status.offline > span,
 .footer-status.offline {
   background: #c94a4a;
   box-shadow: 0 0 0 3px #c94a4a22;
+  animation: none;
 }
 
 .top-icon {
@@ -225,6 +228,7 @@ button:disabled {
 .top-icon:hover {
   background: #f2f5fa;
   color: #283548;
+  transform: translateY(-1px);
 }
 
 .notification-button {
@@ -241,6 +245,7 @@ button:disabled {
   border-radius: 50%;
   background: #d94c46;
   border: 1.5px solid #fff;
+  animation: alert-beacon 2s ease-in-out infinite;
 }
 
 .popover-anchor,
@@ -308,10 +313,12 @@ button:disabled {
   background: #f8faff;
   color: #2f3c4e;
   text-align: left;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease-out;
 }
 
 .notification-item:hover {
   background: #edf2ff;
+  transform: translateX(3px);
 }
 
 .notification-item > div {
@@ -435,6 +442,7 @@ button:disabled {
   color: #5b6778;
   letter-spacing: 0.08em;
   margin-bottom: 0.45rem;
+  animation: rise-in 320ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards;
 }
 
 .breadcrumbs span {
@@ -450,18 +458,21 @@ button:disabled {
   color: #1f2c3d;
   margin: 0;
   font-weight: 750;
+  animation: rise-in 360ms cubic-bezier(0.22, 1, 0.36, 1) 50ms backwards;
 }
 
 .page-heading p {
   font-size: 0.9375rem;
   color: #526071;
   margin: 0.45rem 0 0;
+  animation: rise-in 380ms cubic-bezier(0.22, 1, 0.36, 1) 100ms backwards;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  animation: rise-in 380ms cubic-bezier(0.22, 1, 0.36, 1) 140ms backwards;
 }
 
 .button {
@@ -477,14 +488,26 @@ button:disabled {
   gap: 0.4375rem;
   font-size: 0.875rem;
   font-weight: 600;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    scale 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease-out,
+    background 160ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out;
   white-space: nowrap;
 }
 
-.button.secondary:hover {
+.button svg {
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.button.secondary:hover:not(:disabled) {
   border-color: #bcc8dc;
   background: #f8faff;
   color: #2448ad;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -8px rgba(37, 82, 208, 0.25);
 }
 
 .button.primary {
@@ -494,9 +517,11 @@ button:disabled {
   box-shadow: 0 3px 9px #2f56c629;
 }
 
-.button.primary:hover {
+.button.primary:hover:not(:disabled) {
   background: #2447ae;
   border-color: #2447ae;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px -10px rgba(37, 82, 208, 0.52);
 }
 
 .module-navigation {
@@ -504,12 +529,12 @@ button:disabled {
   align-items: center;
   gap: 0.625rem;
   min-width: 0;
-  margin: 0 0 1.25rem;
+  margin: -0.25rem 0 1rem;
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: #ccd5e3 transparent;
   white-space: nowrap;
-  padding-bottom: 0.25rem;
+  padding: 0.35rem 0.125rem 0.5rem;
 }
 
 .module-tabs {
@@ -537,6 +562,16 @@ button:disabled {
   color: #3e4d63;
   font-size: 0.875rem;
   font-weight: 600;
+  transition:
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 200ms ease-out,
+    background 180ms ease-out,
+    border-color 180ms ease-out,
+    color 180ms ease-out;
+}
+
+.module-tabs button svg {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .module-tabs button.active {
@@ -548,10 +583,22 @@ button:disabled {
   color: #ffffff;
 }
 
+.module-tabs button.active svg {
+  transform: scale(1.08);
+}
+
 .module-tabs button:not(.active):hover {
   border-color: rgba(183, 204, 255, 0.95);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(238, 244, 255, 0.82));
   color: #1f44ad;
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 20px -10px rgba(37, 82, 208, 0.28);
+}
+
+.module-tabs button:not(.active):hover svg {
+  transform: scale(1.12) rotate(-4deg);
 }
 
 .module-subtabs {
@@ -578,11 +625,13 @@ button:disabled {
   color: #4b596b;
   font-size: 0.8125rem;
   font-weight: 600;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out, box-shadow 160ms ease-out;
 }
 
 .module-subtabs button:hover {
   background: rgba(255, 255, 255, 0.85);
   color: var(--blue);
+  transform: translateY(-1px);
 }
 
 .module-subtabs button.active {
@@ -601,6 +650,7 @@ button:disabled {
   color: #526071;
   margin: 0 0 1rem;
   flex-wrap: wrap;
+  animation: rise-in 300ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .summary-dot {
@@ -609,6 +659,7 @@ button:disabled {
   background: #1e9e70;
   border-radius: 50%;
   box-shadow: 0 0 0 3px #1e9e701c;
+  animation: beacon-pulse 2.4s ease-in-out infinite;
 }
 
 .summary-separator {
@@ -767,12 +818,17 @@ button:disabled {
   white-space: nowrap;
 }
 
+.data-table tbody tr {
+  transition: background 160ms ease-out, box-shadow 160ms ease-out;
+}
+
 .data-table tbody tr:last-child td {
   border-bottom: 0;
 }
 
 .data-table tbody tr:hover {
-  background: #f9fbff;
+  background: #f5f8ff;
+  box-shadow: inset 3px 0 0 var(--blue);
 }
 
 .data-table tbody tr:hover td:first-child {
@@ -804,6 +860,11 @@ button:disabled {
   height: 0.375rem;
   border-radius: 50%;
   background: currentColor;
+}
+
+.badge.positive i,
+.badge.warning i {
+  animation: dot-breathe 2.4s ease-in-out infinite;
 }
 
 .badge.positive {
@@ -864,11 +925,13 @@ button:disabled {
   gap: 0.3rem;
   font-size: 0.8125rem;
   font-weight: 600;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), color 150ms ease-out;
 }
 
 .row-action:hover {
   color: #1f3c8c;
   text-decoration: underline;
+  transform: translateY(-1px);
 }
 
 .row-action.danger {
@@ -1024,6 +1087,7 @@ button:disabled {
   gap: 0.625rem;
   font-size: 0.875rem;
   color: #3e5276;
+  animation: rise-in 340ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards;
 }
 
 .security-note svg {
@@ -1057,14 +1121,14 @@ button:disabled {
   border-radius: 0.625rem;
   background: #fff;
   border: 1px solid #cbe4d6;
-  box-shadow: 0 8px 25px #17283b1f;
+  box-shadow: 0 14px 32px -10px rgba(23, 40, 59, 0.2);
   display: flex;
   align-items: center;
   gap: 0.625rem;
   color: #166542;
   font-size: 0.875rem;
   font-weight: 500;
-  animation: toast-in 0.2s ease-out;
+  animation: toast-in 260ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .toast.error {
@@ -1084,11 +1148,11 @@ button:disabled {
 @keyframes toast-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateX(24px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
   }
 }
 
@@ -1102,6 +1166,10 @@ dialog::backdrop {
   overscroll-behavior: contain;
   background: rgba(16, 32, 57, 0.48);
   backdrop-filter: blur(2px);
+}
+
+dialog.modal-dialog[open]::backdrop {
+  animation: backdrop-in 200ms ease-out backwards;
 }
 
 dialog.modal-dialog {
@@ -1119,7 +1187,7 @@ dialog.modal-dialog {
 
 dialog.modal-dialog[open] {
   display: block;
-  animation: modal-in 0.18s ease-out;
+  animation: modal-in 260ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .modal-panel {
@@ -1196,6 +1264,7 @@ dialog.modal-dialog[open] {
   color: #243245;
   outline: none;
   font-size: 0.9375rem;
+  transition: border-color 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
 }
 
 .form-field input:focus,
@@ -1239,6 +1308,7 @@ dialog.modal-dialog[open] {
 .form-field :is(input, select, textarea):is(:user-invalid, .user-invalid-fallback) + .error-msg,
 .form-field:has(.input-wrap :is(input, select):is(:user-invalid, .user-invalid-fallback)) .error-msg {
   display: flex;
+  animation: error-pop 220ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .form-field:has(.input-wrap :is(input, select):is(:user-invalid, .user-invalid-fallback)) .input-wrap {
@@ -1330,6 +1400,7 @@ dialog.modal-dialog[open] {
 }
 
 .boot-brand {
+  position: relative;
   height: 2.8125rem;
   width: 2.8125rem;
   background: var(--blue);
@@ -1339,6 +1410,7 @@ dialog.modal-dialog[open] {
   place-items: center;
   margin-bottom: 1.375rem;
   box-shadow: 0 7px 20px #365ed036;
+  animation: boot-halo 2.2s ease-in-out infinite;
 }
 
 .loading-spinner {
@@ -1391,10 +1463,12 @@ dialog.modal-dialog[open] {
   position: absolute;
   width: 31rem;
   height: 31rem;
-  border: 1px solid #ffffff0d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   right: -13rem;
   top: 6rem;
+  pointer-events: none;
+  animation: orbit-drift-outer 18s ease-in-out infinite alternate;
 }
 
 .login-visual::after {
@@ -1402,10 +1476,12 @@ dialog.modal-dialog[open] {
   position: absolute;
   width: 23rem;
   height: 23rem;
-  border: 1px solid #ffffff14;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
   right: -9rem;
   top: 10rem;
+  pointer-events: none;
+  animation: orbit-drift-inner 24s ease-in-out infinite alternate;
 }
 
 .login-visual-top {
@@ -1415,6 +1491,7 @@ dialog.modal-dialog[open] {
   align-items: center;
   gap: 0.6875rem;
   font: 750 1.0625rem Manrope, sans-serif;
+  animation: rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards;
 }
 
 .login-visual-top strong span {
@@ -1439,6 +1516,7 @@ dialog.modal-dialog[open] {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  animation: rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards;
 }
 
 .login-visual-copy .eyebrow span {
@@ -1447,12 +1525,14 @@ dialog.modal-dialog[open] {
   background: #6bd1a6;
   border-radius: 50%;
   box-shadow: 0 0 0 4px #6bd1a61e;
+  animation: eyebrow-pulse 2.2s ease-in-out infinite;
 }
 
 .login-visual-copy h1 {
   font: 800 clamp(2rem, 1.5rem + 2vw, 2.875rem) / 1.15 Manrope, sans-serif;
   letter-spacing: -0.04em;
   margin: 1.125rem 0 0.875rem;
+  animation: rise-in 460ms cubic-bezier(0.22, 1, 0.36, 1) 160ms backwards;
 }
 
 .login-visual-copy h1 em {
@@ -1466,6 +1546,7 @@ dialog.modal-dialog[open] {
   font-size: 0.9375rem;
   line-height: 1.65;
   margin: 0;
+  animation: rise-in 460ms cubic-bezier(0.22, 1, 0.36, 1) 240ms backwards;
 }
 
 .visual-stat-row {
@@ -1473,6 +1554,7 @@ dialog.modal-dialog[open] {
   align-items: center;
   gap: 1.5rem;
   margin-top: 2.5rem;
+  animation: rise-in 460ms cubic-bezier(0.22, 1, 0.36, 1) 320ms backwards;
 }
 
 .visual-stat {
@@ -1504,6 +1586,7 @@ dialog.modal-dialog[open] {
   justify-content: space-between;
   color: #a6b7d1;
   font-size: 0.8125rem;
+  animation: rise-in 440ms cubic-bezier(0.22, 1, 0.36, 1) 380ms backwards;
 }
 
 .login-form-side {
@@ -1518,6 +1601,7 @@ dialog.modal-dialog[open] {
 
 .login-card {
   width: min(24rem, 100%);
+  animation: card-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) 60ms backwards;
 }
 
 .login-mobile-brand {
@@ -1537,6 +1621,7 @@ dialog.modal-dialog[open] {
   color: #2f56c6;
   background: #edf2ff;
   margin-bottom: 1rem;
+  animation: rise-in 380ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
 }
 
 .login-welcome .eyebrow {
@@ -1558,6 +1643,19 @@ dialog.modal-dialog[open] {
 
 .login-input {
   margin-bottom: 1rem;
+  animation: rise-in 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.login-input:nth-of-type(1) {
+  animation-delay: 150ms;
+}
+
+.login-input:nth-of-type(2) {
+  animation-delay: 210ms;
+}
+
+.login-input:nth-of-type(3) {
+  animation-delay: 270ms;
 }
 
 .input-wrap {
@@ -1620,6 +1718,7 @@ dialog.modal-dialog[open] {
   font-size: 0.875rem;
   line-height: 1.45;
   margin: 0.25rem 0 0.875rem;
+  animation: shake-x 380ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
 .login-submit {
@@ -1628,10 +1727,16 @@ dialog.modal-dialog[open] {
   margin-top: 0.25rem;
   justify-content: center;
   font-size: 0.9375rem;
+  animation: rise-in 360ms cubic-bezier(0.22, 1, 0.36, 1) 330ms backwards;
 }
 
 .login-submit svg {
   margin-left: auto;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.login-submit:hover:not(:disabled) svg {
+  transform: translateX(4px);
 }
 
 .login-note {
@@ -1687,6 +1792,7 @@ dialog.modal-dialog[open] {
     radial-gradient(28rem 16rem at 86% 12%, rgba(56, 189, 248, 0.42), transparent 62%),
     radial-gradient(22rem 14rem at 14% 110%, rgba(168, 85, 247, 0.38), transparent 60%),
     linear-gradient(125deg, #173a99 0%, #3d3bc4 48%, #077b96 100%);
+  background-size: 130% 130%;
   border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.44),
@@ -1698,6 +1804,9 @@ dialog.modal-dialog[open] {
   align-items: center;
   margin-bottom: 1.125rem;
   color: #ffffff;
+  animation:
+    rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards,
+    gradient-sweep 14s ease-in-out infinite alternate;
 }
 
 .liquid-orb {
@@ -1713,6 +1822,7 @@ dialog.modal-dialog[open] {
   top: -5rem;
   right: 12%;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.28), rgba(56, 189, 248, 0.08) 65%, transparent 72%);
+  animation: orb-drift-a 9s ease-in-out infinite alternate;
 }
 
 .orb-b {
@@ -1721,6 +1831,7 @@ dialog.modal-dialog[open] {
   bottom: -4rem;
   left: 34%;
   background: radial-gradient(circle, rgba(167, 139, 250, 0.35), transparent 70%);
+  animation: orb-drift-b 11s ease-in-out infinite alternate;
 }
 
 .orb-c {
@@ -1729,6 +1840,7 @@ dialog.modal-dialog[open] {
   top: 1.25rem;
   left: -2.25rem;
   background: radial-gradient(circle, rgba(34, 211, 238, 0.28), transparent 70%);
+  animation: orb-drift-c 8s ease-in-out infinite alternate;
 }
 
 .welcome-copy {
@@ -1802,6 +1914,7 @@ dialog.modal-dialog[open] {
   display: grid;
   place-items: center;
   color: #fff;
+  pointer-events: none;
 }
 
 .welcome-ornament > span {
@@ -1818,20 +1931,28 @@ dialog.modal-dialog[open] {
     inset 0 1px 0 rgba(255, 255, 255, 0.65),
     0 12px 26px rgba(10, 26, 77, 0.28);
   transform: rotate(-8deg);
+  animation: ornament-float 4.8s ease-in-out infinite alternate;
 }
 
 .ornament-orbit {
   position: absolute;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px dashed rgba(255, 255, 255, 0.34);
   border-radius: 50%;
   width: 6.75rem;
   height: 6.75rem;
 }
 
+.orbit-one {
+  animation: orbit-spin 16s linear infinite;
+}
+
 .orbit-two {
   width: 9rem;
   height: 9rem;
-  border-color: rgba(255, 255, 255, 0.18);
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.22);
+  border-top-color: rgba(255, 255, 255, 0.65);
+  animation: orbit-spin 24s linear infinite reverse;
 }
 
 .stats-grid {
@@ -1855,11 +1976,44 @@ dialog.modal-dialog[open] {
   min-height: 7.75rem;
   padding: 1.125rem 1.25rem 1.25rem;
   border-radius: 1rem;
-  transition: transform 150ms ease-out, box-shadow 150ms ease-out, border-color 150ms ease-out;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease-out, border-color 200ms ease-out;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.stat-card:nth-child(1) { animation-delay: 60ms; }
+.stat-card:nth-child(2) { animation-delay: 120ms; }
+.stat-card:nth-child(3) { animation-delay: 180ms; }
+.stat-card:nth-child(4) { animation-delay: 240ms; }
+
+.stat-card::before,
+.quick-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.58) 50%, transparent 80%);
+  transform: translateX(-125%) skewX(-18deg);
+  transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.stat-card:hover::before,
+.quick-card:hover::before {
+  transform: translateX(125%) skewX(-18deg);
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 20px 36px -16px rgba(23, 43, 89, 0.24);
+}
+
+.stat-icon {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.1) rotate(-4deg);
 }
 
 .stat-glow {
@@ -1994,6 +2148,7 @@ dialog.modal-dialog[open] {
 .status-strip {
   padding: 1.125rem 1.25rem;
   margin-bottom: 1.125rem;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) 180ms backwards;
 }
 
 .status-strip-head {
@@ -2035,6 +2190,9 @@ dialog.modal-dialog[open] {
   height: 100%;
   border-radius: 999px;
   min-width: 0.5rem;
+  transform-origin: left center;
+  animation: bar-grow 680ms cubic-bezier(0.22, 1, 0.36, 1) 240ms backwards;
+  transition: width 550ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .distribution-segment.tone-blue {
@@ -2129,6 +2287,15 @@ dialog.modal-dialog[open] {
 .deadlines-panel {
   min-height: 15rem;
   padding: 1.125rem 1.25rem 1rem;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.activity-panel {
+  animation-delay: 220ms;
+}
+
+.deadlines-panel {
+  animation-delay: 280ms;
 }
 
 .panel-heading {
@@ -2198,12 +2365,21 @@ dialog.modal-dialog[open] {
   align-items: center;
   gap: 0.6875rem;
   text-align: left;
+  animation: row-slide-in 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease-out, border-color 160ms ease-out, box-shadow 180ms ease-out;
 }
+
+.activity-row:nth-child(1) { animation-delay: 260ms; }
+.activity-row:nth-child(2) { animation-delay: 305ms; }
+.activity-row:nth-child(3) { animation-delay: 350ms; }
+.activity-row:nth-child(4) { animation-delay: 395ms; }
+.activity-row:nth-child(5) { animation-delay: 440ms; }
 
 .activity-row:hover {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(174, 198, 255, 0.9);
   box-shadow: 0 8px 18px -12px rgba(37, 82, 208, 0.35);
+  transform: translateX(4px);
 }
 
 .activity-row:hover .activity-main strong {
@@ -2280,6 +2456,19 @@ dialog.modal-dialog[open] {
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.56);
+  animation: row-slide-in 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease-out, border-color 160ms ease-out;
+}
+
+.deadline-row:nth-child(1) { animation-delay: 300ms; }
+.deadline-row:nth-child(2) { animation-delay: 345ms; }
+.deadline-row:nth-child(3) { animation-delay: 390ms; }
+.deadline-row:nth-child(4) { animation-delay: 435ms; }
+
+.deadline-row:hover {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(174, 198, 255, 0.85);
+  transform: translateX(3px);
 }
 
 .deadline-symbol {
@@ -2350,7 +2539,14 @@ dialog.modal-dialog[open] {
   text-align: left;
   display: flex;
   flex-direction: column;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease-out, border-color 200ms ease-out;
 }
+
+.quick-card:nth-child(1) { animation-delay: 240ms; }
+.quick-card:nth-child(2) { animation-delay: 300ms; }
+.quick-card:nth-child(3) { animation-delay: 360ms; }
+.quick-card:nth-child(4) { animation-delay: 420ms; }
 
 .quick-card.accent-blue {
   background: linear-gradient(145deg, color-mix(in oklab, #3b82f6 10%, white), rgba(255, 255, 255, 0.62));
@@ -2373,7 +2569,7 @@ dialog.modal-dialog[open] {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.98),
     0 18px 34px -16px rgba(37, 82, 208, 0.34);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 .quick-card-top {
@@ -2391,6 +2587,11 @@ dialog.modal-dialog[open] {
   place-items: center;
   color: #ffffff;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 12px -4px rgba(15, 23, 42, 0.25);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.quick-card:hover .quick-icon {
+  transform: scale(1.1) rotate(-4deg);
 }
 
 .quick-number {
@@ -2421,11 +2622,11 @@ dialog.modal-dialog[open] {
   right: 0.875rem;
   bottom: 0.875rem;
   color: #2552d0;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .quick-card:hover .quick-arrow {
-  transform: translateX(3px);
-  transition: transform 0.15s ease-out;
+  transform: translateX(4px);
 }
 
 @container (max-width: 900px) {
@@ -2459,7 +2660,7 @@ dialog.modal-dialog[open] {
 @keyframes modal-in {
   from {
     opacity: 0;
-    transform: translateY(5px) scale(0.99);
+    transform: translateY(18px) scale(0.95);
   }
   to {
     opacity: 1;
@@ -2467,27 +2668,12 @@ dialog.modal-dialog[open] {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .rotating svg,
-  .spin,
-  .loading-spinner {
-    animation: none;
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
   }
-
-  button,
-  .toast,
-  dialog.modal-dialog[open],
-  .stat-card,
-  .quick-card {
-    animation: none;
-    transition: none;
-  }
-
-  button:not(:disabled):active,
-  .stat-card:hover,
-  .quick-card:hover {
-    transform: none;
-    scale: 1;
+  to {
+    opacity: 1;
   }
 }
 
@@ -2572,7 +2758,7 @@ dialog.modal-dialog[open] {
 
   .login-form-side {
     min-height: 100dvh;
-    padding: 1.5rem 1.25rem 3.5rem;
+    padding: 1.5rem 1.25rem 4rem;
     background: linear-gradient(180deg, #f9faff, #fff 36%);
   }
 
@@ -2580,7 +2766,7 @@ dialog.modal-dialog[open] {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.35rem;
     font: 750 1rem Manrope, sans-serif;
     color: #2c384a;
   }
@@ -2619,6 +2805,7 @@ dialog.modal-dialog[open] {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  animation: card-rise 380ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards;
 }
 
 .tablero-share-copy h2 {
@@ -2661,6 +2848,7 @@ dialog.modal-dialog[open] {
 .tablero-iframe-shell {
   padding: 0.5rem;
   overflow: hidden;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) 90ms backwards;
 }
 
 .tablero-iframe {
@@ -2716,6 +2904,28 @@ dialog.modal-dialog[open] {
   border-radius: 0.95rem;
   border: 2px solid rgba(220, 38, 38, 0.65);
   background: linear-gradient(145deg, color-mix(in oklab, #ef4444 9%, white), rgba(255, 255, 255, 0.72));
+  animation: card-rise 400ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease-out;
+}
+
+.tablero-kpi-card:nth-child(1) { animation-delay: 40ms; }
+.tablero-kpi-card:nth-child(2) { animation-delay: 95ms; }
+.tablero-kpi-card:nth-child(3) { animation-delay: 150ms; }
+.tablero-kpi-card:nth-child(4) { animation-delay: 205ms; }
+
+.tablero-kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 18px 34px -14px rgba(220, 38, 38, 0.24);
+}
+
+.tablero-kpi-card .kpi-icon {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tablero-kpi-card:hover .kpi-icon {
+  transform: scale(1.1) rotate(-4deg);
 }
 
 .zone-tag {
@@ -2788,6 +2998,22 @@ dialog.modal-dialog[open] {
   flex-direction: column;
   gap: 0.75rem;
   min-height: 16rem;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease-out;
+}
+
+.tablero-chart-card:nth-child(1) { animation-delay: 110ms; }
+.tablero-chart-card:nth-child(2) { animation-delay: 165ms; }
+.tablero-chart-card:nth-child(3) { animation-delay: 220ms; }
+.tablero-chart-card:nth-child(4) { animation-delay: 275ms; }
+.tablero-chart-card:nth-child(5) { animation-delay: 330ms; }
+.tablero-chart-card:nth-child(6) { animation-delay: 385ms; }
+
+.tablero-chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 18px 34px -14px rgba(22, 163, 74, 0.22);
 }
 
 .chart-card-head {
@@ -2818,6 +3044,13 @@ dialog.modal-dialog[open] {
   display: grid;
   place-items: center;
   box-shadow: 0 8px 18px -10px rgba(15, 23, 42, 0.35);
+  animation: pie-reveal 650ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 240ms ease-out;
+}
+
+.tablero-chart-card:hover .pie-ring {
+  transform: scale(1.05);
+  box-shadow: 0 14px 26px -10px rgba(37, 82, 208, 0.35);
 }
 
 .pie-hole {
@@ -2913,7 +3146,17 @@ dialog.modal-dialog[open] {
   display: block;
   height: 100%;
   border-radius: 999px;
+  transform-origin: left center;
+  animation: bar-grow 680ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.bar-item:nth-child(1) .bar-fill { animation-delay: 80ms; }
+.bar-item:nth-child(2) .bar-fill { animation-delay: 140ms; }
+.bar-item:nth-child(3) .bar-fill { animation-delay: 200ms; }
+.bar-item:nth-child(4) .bar-fill { animation-delay: 260ms; }
+.bar-item:nth-child(5) .bar-fill { animation-delay: 320ms; }
+.bar-item:nth-child(6) .bar-fill { animation-delay: 380ms; }
 
 .chart-empty {
   margin: auto 0;
@@ -2934,6 +3177,18 @@ dialog.modal-dialog[open] {
   border-radius: 0.95rem;
   border: 2px solid rgba(124, 58, 237, 0.68);
   background: linear-gradient(145deg, color-mix(in oklab, #8b5cf6 9%, white), rgba(255, 255, 255, 0.78));
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease-out;
+}
+
+.tablero-filter-card:nth-child(1) { animation-delay: 120ms; }
+.tablero-filter-card:nth-child(2) { animation-delay: 200ms; }
+
+.tablero-filter-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 18px 34px -14px rgba(124, 58, 237, 0.22);
 }
 
 .filter-card-head h2 {
@@ -2966,6 +3221,7 @@ dialog.modal-dialog[open] {
 
 .reportes-filters-card {
   padding: 1.25rem;
+  animation: card-rise 380ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards;
 }
 
 .reportes-head {
@@ -2995,6 +3251,10 @@ dialog.modal-dialog[open] {
   gap: 0.5rem;
 }
 
+.reportes-actions .button:hover:not(:disabled) svg {
+  transform: translateY(-1px) scale(1.1);
+}
+
 .reportes-criteria-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -3009,17 +3269,25 @@ dialog.modal-dialog[open] {
 
 .report-sheet {
   overflow: hidden;
+  animation: card-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) 90ms backwards;
 }
 
 .report-sheet-header {
   padding: 1.25rem 1.375rem;
-  background: linear-gradient(125deg, #142641, #2552d0);
+  background: linear-gradient(125deg, #142641, #2552d0, #19439e);
+  background-size: 200% 200%;
   color: #ffffff;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  animation: gradient-sweep 12s ease-in-out infinite alternate;
+}
+
+.report-count-pop {
+  display: inline-block;
+  animation: pill-pop 340ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .report-sheet-kicker {
@@ -3070,6 +3338,11 @@ dialog.modal-dialog[open] {
   color: #4b596b;
 }
 
+.records-panel,
+.user-manager {
+  animation: card-rise 380ms cubic-bezier(0.22, 1, 0.36, 1) 40ms backwards;
+}
+
 @media (max-width: 1120px) {
   .tablero-board-grid {
     grid-template-columns: 1fr;
@@ -3093,5 +3366,390 @@ dialog.modal-dialog[open] {
 
   .tablero-iframe {
     min-height: 75rem;
+  }
+}
+
+/* ============================================================
+   MOTION KEYFRAMES & REDUCED MOTION ACCESSIBILITY GUARD
+   ============================================================ */
+@keyframes topbar-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes row-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pill-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.84);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes error-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake-x {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes beacon-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 3px rgba(34, 160, 107, 0.16);
+  }
+  50% {
+    transform: scale(1.16);
+    box-shadow: 0 0 0 7px rgba(34, 160, 107, 0);
+  }
+}
+
+@keyframes alert-beacon {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(217, 76, 70, 0.45);
+  }
+  50% {
+    transform: scale(1.14);
+    box-shadow: 0 0 0 6px rgba(217, 76, 70, 0);
+  }
+}
+
+@keyframes dot-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.72;
+  }
+}
+
+@keyframes eyebrow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(107, 209, 166, 0.18);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 0 8px rgba(107, 209, 166, 0);
+  }
+}
+
+@keyframes boot-halo {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 7px 20px rgba(54, 94, 208, 0.25), 0 0 0 0 rgba(54, 94, 208, 0.24);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 12px 26px rgba(54, 94, 208, 0.32), 0 0 0 12px rgba(54, 94, 208, 0);
+  }
+}
+
+@keyframes orbit-drift-outer {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-18px, 14px, 0) scale(1.05) rotate(12deg);
+  }
+}
+
+@keyframes orbit-drift-inner {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(14px, -16px, 0) scale(0.95) rotate(-14deg);
+  }
+}
+
+@keyframes orb-drift-a {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-22px, 16px, 0) scale(1.08);
+  }
+}
+
+@keyframes orb-drift-b {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(20px, -14px, 0) scale(1.1);
+  }
+}
+
+@keyframes orb-drift-c {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(14px, 18px, 0) scale(0.92);
+  }
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ornament-float {
+  0% {
+    transform: translateY(0) rotate(-8deg);
+  }
+  100% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+}
+
+@keyframes gradient-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pie-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.84) rotate(-24deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotating svg,
+  .spin,
+  .loading-spinner,
+  .boot-brand,
+  .topbar,
+  .api-status > span,
+  .footer-status,
+  .summary-dot,
+  .notification-button.has-alerts::after,
+  .badge.positive i,
+  .badge.warning i,
+  .breadcrumbs,
+  .page-heading h1,
+  .page-heading p,
+  .header-actions,
+  .module-summary,
+  .security-note,
+  .records-panel,
+  .user-manager,
+  .toast,
+  dialog.modal-dialog[open],
+  dialog.modal-dialog[open]::backdrop,
+  .error-msg,
+  .login-visual::before,
+  .login-visual::after,
+  .login-visual-top,
+  .login-visual-copy .eyebrow,
+  .login-visual-copy .eyebrow span,
+  .login-visual-copy h1,
+  .login-visual-copy > p,
+  .visual-stat-row,
+  .login-visual-footer,
+  .login-card,
+  .login-icon,
+  .login-input,
+  .login-error,
+  .login-submit,
+  .welcome-banner,
+  .liquid-orb,
+  .orb-a,
+  .orb-b,
+  .orb-c,
+  .welcome-ornament > span,
+  .ornament-orbit,
+  .orbit-one,
+  .orbit-two,
+  .stat-card,
+  .status-strip,
+  .distribution-segment,
+  .activity-panel,
+  .deadlines-panel,
+  .activity-row,
+  .deadline-row,
+  .quick-card,
+  .tablero-share-bar,
+  .tablero-iframe-shell,
+  .tablero-kpi-card,
+  .tablero-chart-card,
+  .pie-ring,
+  .bar-fill,
+  .tablero-filter-card,
+  .reportes-filters-card,
+  .report-sheet,
+  .report-sheet-header,
+  .report-count-pop {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  button,
+  .button,
+  .button svg,
+  .top-icon,
+  .notification-item,
+  .module-tabs button,
+  .module-tabs button svg,
+  .module-subtabs button,
+  .data-table tbody tr,
+  .row-action,
+  .stat-card,
+  .stat-card::before,
+  .stat-icon,
+  .distribution-segment,
+  .activity-row,
+  .deadline-row,
+  .quick-card,
+  .quick-card::before,
+  .quick-icon,
+  .quick-arrow,
+  .tablero-kpi-card,
+  .tablero-kpi-card .kpi-icon,
+  .tablero-chart-card,
+  .pie-ring,
+  .bar-fill,
+  .tablero-filter-card,
+  .login-submit svg,
+  .reportes-actions .button svg {
+    transition: none !important;
+  }
+
+  button:not(:disabled):active,
+  .button.primary:hover:not(:disabled),
+  .button.secondary:hover:not(:disabled),
+  .top-icon:hover,
+  .notification-item:hover,
+  .module-tabs button:not(.active):hover,
+  .module-tabs button.active svg,
+  .module-tabs button:not(.active):hover svg,
+  .module-subtabs button:hover,
+  .row-action:hover,
+  .stat-card:hover,
+  .stat-card:hover .stat-icon,
+  .activity-row:hover,
+  .deadline-row:hover,
+  .quick-card:hover,
+  .quick-card:hover .quick-icon,
+  .quick-card:hover .quick-arrow,
+  .tablero-kpi-card:hover,
+  .tablero-kpi-card:hover .kpi-icon,
+  .tablero-chart-card:hover,
+  .tablero-chart-card:hover .pie-ring,
+  .tablero-filter-card:hover,
+  .login-submit:hover:not(:disabled) svg,
+  .reportes-actions .button:hover:not(:disabled) svg {
+    transform: none !important;
+    scale: 1 !important;
+  }
+
+  .stat-card::before,
+  .quick-card::before {
+    display: none;
   }
 }
